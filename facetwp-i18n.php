@@ -22,6 +22,8 @@ class FWP_i18n
      * Intialize
      */
     function init() {
+        $this->load_textdomain();
+
         if ( function_exists( 'FWP' ) ) {
             if ( function_exists( 'pll_register_string' ) ) {
                 include( dirname( __FILE__ ) . '/includes/class-polylang.php' );
