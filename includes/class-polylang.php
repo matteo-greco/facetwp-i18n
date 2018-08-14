@@ -11,6 +11,7 @@ class FWP_i18n_Polylang
         add_filter( 'facetwp_indexer_query_args', array( $this, 'facetwp_indexer_query_args' ) );
         add_filter( 'facetwp_render_params', array( $this, 'support_preloader' ) );
         add_filter( 'facetwp_i18n', array( $this, 'facetwp_i18n' ) );
+        add_filter( 'get_terms_args', array( $this, 'get_terms_args' ) );
     }
 
 
@@ -93,6 +94,18 @@ class FWP_i18n_Polylang
         }
 
         return $string;
+    }
+
+
+    /**
+     * Grab all taxonomy terms when indexing
+     */
+    function get_terms_args( $args ) {
+        if ( '' !== get_option( 'facetwp_indexing', '' ) ) {
+            $args['lang'] = '';
+        }
+
+        return $args;
     }
 }
 
