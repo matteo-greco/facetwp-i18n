@@ -2,7 +2,7 @@
 /*
 Plugin Name: FacetWP - Multilingual support
 Description: Multilingual support for FacetWP
-Version: 0.1
+Version: 0.2
 Author: FacetWP, LLC
 Author URI: https://facetwp.com/
 GitHub URI: facetwp/facetwp-i18n
