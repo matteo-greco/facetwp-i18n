@@ -22,8 +22,6 @@ class FWP_i18n
      * Intialize
      */
     function init() {
-        $this->load_textdomain();
-
         if ( function_exists( 'FWP' ) ) {
             if ( function_exists( 'pll_register_string' ) ) {
                 include( dirname( __FILE__ ) . '/includes/class-polylang.php' );
@@ -32,22 +30,6 @@ class FWP_i18n
             if ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
                 include( dirname( __FILE__ ) . '/includes/class-wpml.php' );
             }
-        }
-    }
-
-
-    /**
-     * Text domain
-     */
-    function load_textdomain() {
-        $locale = apply_filters( 'plugin_locale', get_locale(), 'fwp' );
-        $mofile = WP_LANG_DIR . '/facetwp/fwp-' . $locale . '.mo';
-
-        if ( file_exists( $mofile ) ) {
-            load_textdomain( 'fwp', $mofile );
-        }
-        else {
-            load_plugin_textdomain( 'fwp', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
         }
     }
 }
