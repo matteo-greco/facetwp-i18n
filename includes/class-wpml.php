@@ -135,4 +135,4 @@ class FWP_i18n_WPML
     }
 }
 
-new FacetWP_i18n_WPML();
+new FWP_i18n_WPML();
