@@ -13,6 +13,7 @@ class FWP_i18n_WPML
         add_filter( 'facetwp_render_params', array( $this, 'support_preloader' ) );
         add_filter( 'facetwp_indexer_query_args', array( $this, 'indexer_query_args' ) );
         add_action( 'facetwp_indexer_post', array( $this, 'set_post_language_code' ) );
+        add_action( 'facetwp_indexer_complete', array( $this, 'reset_language' ) );
 
         // Setup properties
         $this->default_language = apply_filters( 'wpml_default_language', null );
@@ -94,6 +95,11 @@ class FWP_i18n_WPML
     function set_post_language_code( $params ) {
         $language_code = $this->get_post_language_code( $params['post_id'] );
         do_action( 'wpml_switch_language', $language_code );
+    }
+
+
+    function reset_language() {
+        do_action( 'wpml_switch_language', $this->current_language );
     }
 
 
