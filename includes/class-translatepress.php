@@ -11,6 +11,13 @@
 class FWP_i18n_TranslatePress {
 
 	/**
+	 * Hold the default language
+	 *
+	 * @var string $default_language
+	 */
+	public $default_language;
+
+	/**
 	 * Hold the current language
 	 *
 	 * @var string $current_language
@@ -24,15 +31,21 @@ class FWP_i18n_TranslatePress {
 		// @codingStandardsIgnoreStart
 		global $TRP_LANGUAGE;
 		$this->current_language = $TRP_LANGUAGE;
+		$trp = TRP_Translate_Press::get_trp_instance();
+    	$trp_settings = $trp->get_component( 'settings' );
+		$settings = $trp_settings->get_settings();
+		$this->default_language = $settings['default-language'];
 		// $this->current_language = 'en';
-		// add_action( 'admin_init', array( $this, 'register_strings' ) );
-		// add_filter( 'facetwp_i18n', array( $this, 'facetwp_i18n' ) );
 		// @codingStandardsIgnoreEnd
 		add_action( 'wp_footer', array( $this, 'wp_footer' ), 30 );
 		add_filter( 'facetwp_query_args', array( $this, 'facetwp_query_args' ), 10, 2 );
-		add_filter( 'facetwp_indexer_query_args', array( $this, 'facetwp_indexer_query_args' ) );
 		add_filter( 'facetwp_render_params', array( $this, 'support_preloader' ) );
-		add_filter( 'get_terms_args', array( $this, 'get_terms_args' ) );
+		// @codingStandardsIgnoreStart
+		// add_action( 'admin_init', array( $this, 'register_strings' ) );
+		// add_filter( 'facetwp_i18n', array( $this, 'facetwp_i18n' ) );
+		// add_filter( 'facetwp_indexer_query_args', array( $this, 'facetwp_indexer_query_args' ) );
+		// add_filter( 'get_terms_args', array( $this, 'get_terms_args' ) );
+		// @codingStandardsIgnoreEnd
 	}
 
 
@@ -40,9 +53,12 @@ class FWP_i18n_TranslatePress {
 	 * Put the language into FWP_HTTP
 	 */
 	public function wp_footer() {
+		error_log( 'in wp_footer' );
+		error_log( 'current_language: ' . $this->current_language );
 		if ( ! empty( $this->current_language ) ) {
-			echo "<script>if ('undefined' != typeof FWP_HTTP) FWP_HTTP.lang = '" . esc_attr( $this->current_language ) . "';</script>";
+			echo "<script>if ('undeoutd' != typeof FWP_HTTP) FWP_HTTP.lang = '" . esc_attr( $this->current_language ) . "';</script>";
 		}
+		error_log( 'out wp_footer' );
 	}
 
 
@@ -53,10 +69,13 @@ class FWP_i18n_TranslatePress {
 	 * @return array (Modified) parameters.
 	 */
 	public function support_preloader( $params ) {
+		error_log( 'in support_preloader' );
+		error_log( 'current_language: ' . $this->current_language );
 		if ( isset( $params['is_preload'] ) && ! empty( $this->current_language ) ) {
 			$params['http_params']['lang'] = $this->current_language;
 		}
-
+		error_log( 'params: ' . print_r( $params, true ) );
+		error_log( 'out support_preloader' );
 		return $params;
 	}
 
@@ -69,10 +88,21 @@ class FWP_i18n_TranslatePress {
 	 * @return array (Modified) arguments.
 	 */
 	public function facetwp_query_args( $args, $class ) {
-		if ( isset( $class->http_params['lang'] ) ) {
-			$args['lang'] = $class->http_params['lang'];
+		error_log( 'in facetwp_query_args' );
+		error_log( 'current_language: ' . $this->current_language );
+		error_log( 'default_language: ' . $this->default_language );
+		$http = FWP()->facet->http_params;
+		error_log( 'http_params: ' . print_r( $http, true ) );
+		if ( isset( $http['lang'] ) && $http['lang'] !== $this->default_language ) {
+			// @codingStandardsIgnoreStart
+			global $TRP_LANGUAGE;
+			error_log( 'old TRP_LANGUAGE: ' . $TRP_LANGUAGE );
+			$TRP_LANGUAGE = $http['lang'];
+			error_log( 'new TRP_LANGUAGE: ' . $TRP_LANGUAGE );
+			// @codingStandardsIgnoreEnd
 		}
-
+		error_log( 'args: ' . print_r( $args, true ) );
+		error_log( 'out facetwp_query_args' );
 		return $args;
 	}
 
